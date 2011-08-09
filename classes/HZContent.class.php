@@ -106,8 +106,8 @@ class HZContent {
 		$defaults = array(
 			'og:title'=>'',
 			'og:type'=>'blog',
-			'og:image'=>'/favicon.ico',
-			'og:url'=>$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+			'og:image'=>'http://'.$_SERVER['HTTP_HOST'].'/favicon.ico',
+			'og:url'=>'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
 			'og:site_name'=>get_bloginfo('name'),
 			'fb:admins'=>'',
 			'og:description'=>'',
@@ -124,9 +124,9 @@ class HZContent {
 		
 		//set the description
 		if(is_single()):
-			$defaults['og:description'] = $this->get_excerpt(array('readmore'=>false));
+			$defaults['og:description'] = htmlentities($this->get_excerpt(array('readmore'=>false)));
 		else:
-			$defaults['og:description'] = get_bloginfo('description');
+			$defaults['og:description'] = htmlentities(get_bloginfo('description'));
 		endif;		
 		
 		$options = array_merge($defaults,$options);
