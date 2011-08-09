@@ -65,14 +65,14 @@ class HZContent {
 	 * @param	string $layout the button style. Can be "standard," "button_count," "box_count." Defaults to "standard."
 	 *	
 	 */	
-	function get_fb_like_button($url = null,$width = 450, $height = 25,$layout='standard') {
+	function get_fb_like_button($url = null,$width = 90, $height = 20,$layout='standard') {
 
 		if (is_null($url))
 			return;
 			
 		$url = urlencode($url);
 
-		return 	"<iframe src='http://www.facebook.com/plugins/like.php?app_id=133916296698900&amp;href=$url&amp;layout=$layout&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=$height' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:450px; height:21px;' allowTransparency='true'></iframe>";
+		return 	"<iframe class='fb-like' src='http://www.facebook.com/plugins/like.php?app_id=133916296698900&amp;href=$url&amp;layout=$layout&amp;width=$width&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=$height' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:$width"."px; height:$height"."px; allowTransparency='true'></iframe>";
 	
 	}
 	
