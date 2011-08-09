@@ -84,7 +84,7 @@ class HZContent {
 			
 		$url = urlencode($url);
 
-		return "<iframe class='fb-like' src='https://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fblog.dormify.com%2Fdiy%2Fmoving-on-up&amp;layout=$layout' scrolling='no' frameborder='0' style='height: $height; width: $width allowTransparency='true'></iframe>";
+		return "<iframe class='fb-like' src='https://www.facebook.com/plugins/like.php?href=$url&amp;layout=$layout' scrolling='no' frameborder='0' style='height: $height; width: $width allowTransparency='true'></iframe>";
 
 	
 	}
