@@ -16,8 +16,20 @@ class HZContent {
 	 * @return bool returns the excerpt on success, false on failure
 	 *	
 	 */
-	function get_excerpt($length = 52,$text = null,$readmore = true, $readmore_link = null) {
+	function get_excerpt($length = 52, $text = null, $readmore = true, $readmore_link = null) {
 		global $post;
+
+		$defaults = array(
+			'length'=>52,
+			'text'=>null,
+			'readmore'=>true,
+			'readmore_link'=>null,
+		);
+		
+		if (is_array($length)) {		
+			$options = array_merge($defaults,$length);
+			extract($options)	;
+		}
 
 		//use the current post body if a text value is not specified
 		if (is_null($text))
@@ -65,19 +77,64 @@ class HZContent {
 	 * @param	string $layout the button style. Can be "standard," "button_count," "box_count." Defaults to "standard."
 	 *	
 	 */	
-	function get_fb_like_button($url = null,$width = 90, $height = 20,$layout='standard') {
+	function get_fb_like_button($url = null,$width = '90px', $height = '22px',$layout='standard') {
 
 		if (is_null($url))
 			return;
 			
 		$url = urlencode($url);
 
-		return 	"<iframe class='fb-like' src='http://www.facebook.com/plugins/like.php?app_id=133916296698900&amp;href=$url&amp;layout=$layout&amp;width=$width&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=$height' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:$width"."px; height:$height"."px; allowTransparency='true'></iframe>";
+		return "<iframe class='fb-like' src='https://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fblog.dormify.com%2Fdiy%2Fmoving-on-up&amp;layout=$layout' scrolling='no' frameborder='0' style='height: $height; width: $width allowTransparency='true'></iframe>";
+
 	
 	}
 	
 	
+	
+	/**
+	 *
+	 * Print FB OpenGraph Meta Data
+	 *
+	 * Returns markup for a FB like button 
+	 *
+	 * @options array an array of meta values whose keys are OpenGraph meta properties
+	 *	
+	 */	
+	function print_fb_meta($options = array()) {
+		global $post, $cat;
 
+		$defaults = array(
+			'og:title'=>'',
+			'og:type'=>'blog',
+			'og:image'=>'/favicon.ico',
+			'og:url'=>$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+			'og:site_name'=>get_bloginfo('name'),
+			'fb:admins'=>'',
+			'og:description'=>'',
+		);
+		
+		//set the title		
+		if (is_category()):
+			$defaults['og:title'] = get_cat_name($cat);
+		elseif(is_single()):
+			$defaults['og:title'] = $post->post_title;
+		else:
+			$defaults['og:title'] = get_bloginfo('name');
+		endif;
+		
+		//set the description
+		if(is_single()):
+			$defaults['og:description'] = $this->get_excerpt(array('readmore'=>false));
+		else:
+			$defaults['og:description'] = get_bloginfo('description');
+		endif;		
+		
+		$options = array_merge($defaults,$options);
+		
+		foreach($options as $key => $value)
+			echo "<meta property='$key' content='$value' />\n";
+		
+	}
 
 		
 	
