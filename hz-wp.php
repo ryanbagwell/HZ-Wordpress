@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: HZWP
+Plugin Name: HZ Wordpress
 Plugin URI: http://www.hzdg.com
 Description: A library of Wordpress functions
 Version: 1.0
