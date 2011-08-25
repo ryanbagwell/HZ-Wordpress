@@ -73,8 +73,8 @@ class HZContent {
 	 *
 	 * @param string the $url the url of the page. defaults to null.
 	 * @param int $width the iframe width
-	 * @param	int $height the iframe height
-	 * @param	string $layout the button style. Can be "standard," "button_count," "box_count." Defaults to "standard."
+	 * @param int $height the iframe height
+	 * @param string $layout the button style. Can be "standard," "button_count," "box_count." Defaults to "standard."
 	 *	
 	 */	
 	function get_fb_like_button($url = null,$width = '90px', $height = '22px',$layout='standard') {
@@ -135,7 +135,36 @@ class HZContent {
 			echo "<meta property='$key' content='$value' />\n";
 		
 	}
+	
+	
+	/**
+	 *
+	 * Print ShareThis buttons with post-specific attributes
+	 *
+	 * Returns markup for ShareThis button tags with post titles, images, etc.
+	 *
+	 * @param string $button_name the name of the ShareThis button (ex: st_fblike_hcount)
+	 * @param int $post_id the post id to share. Optional.
+	 *	
+	 */
+	
+	 function get_sharethis_button($button_name,$post_id = null) {
+		global $post, $hzwp;
+		
+		if (!is_null($post_id))
+			$post = get_post($post_id);
+		
 
+		
+		$title = $post->post_title;
+		$url = get_permalink($post->ID);
+		$image = '';
+		$summary = $this->get_excerpt(25,null,false); 
+					
+		 return "<span class='$button_name' st_title='$post->post_title' st_url='$url' st_image='$image' st_summary='$summary'></span>";
+
+		
+	}
 		
 	
 }
