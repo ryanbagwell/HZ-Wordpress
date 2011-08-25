@@ -154,12 +154,10 @@ class HZContent {
 		if (!is_null($post_id))
 			$post = get_post($post_id);
 		
-
-		
-		$title = $post->post_title;
+		$title = htmlspecialchars($post->post_title,ENT_QUOTES);
 		$url = get_permalink($post->ID);
 		$image = '';
-		$summary = $this->get_excerpt(25,null,false); 
+		$summary = htmlspecialchars($this->get_excerpt(25,null,false),ENT_QUOTES); 
 					
 		 return "<span class='$button_name' st_title='$post->post_title' st_url='$url' st_image='$image' st_summary='$summary'></span>";
 
