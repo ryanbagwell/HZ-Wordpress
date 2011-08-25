@@ -124,9 +124,9 @@ class HZContent {
 		
 		//set the description
 		if(is_single()):
-			$defaults['og:description'] = htmlentities($this->get_excerpt(array('readmore'=>false)),ENT_QUOTES);
+			$defaults['og:description'] = htmlspecialchars($this->get_excerpt(array('readmore'=>false)),ENT_QUOTES);
 		else:
-			$defaults['og:description'] = htmlentities(get_bloginfo('description'),ENT_QUOTES);
+			$defaults['og:description'] = htmlspecialchars(get_bloginfo('description'),ENT_QUOTES);
 		endif;		
 		
 		$options = array_merge($defaults,$options);
@@ -156,10 +156,13 @@ class HZContent {
 		
 		$title = htmlspecialchars($post->post_title,ENT_QUOTES);
 		$url = get_permalink($post->ID);
-		$image = '';
+		
+		$thumb_id = get_post_thumbnail_id($post->ID);
+		$image = wp_get_attachment_image_src($thumb_id);
 		$summary = htmlspecialchars($this->get_excerpt(25,null,false),ENT_QUOTES); 
+	
 					
-		 return "<span class='$button_name' st_title='$post->post_title' st_url='$url' st_image='$image' st_summary='$summary'></span>";
+		 return "<span class='$button_name' st_title='$post->post_title' st_url='$url' st_image='{$image[0]}' st_summary='$summary'></span>";
 
 		
 	}
