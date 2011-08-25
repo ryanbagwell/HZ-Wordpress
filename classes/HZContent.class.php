@@ -124,9 +124,9 @@ class HZContent {
 		
 		//set the description
 		if(is_single()):
-			$defaults['og:description'] = htmlentities($this->get_excerpt(array('readmore'=>false)));
+			$defaults['og:description'] = htmlentities($this->get_excerpt(array('readmore'=>false)),ENT_QUOTES);
 		else:
-			$defaults['og:description'] = htmlentities(get_bloginfo('description'));
+			$defaults['og:description'] = htmlentities(get_bloginfo('description'),ENT_QUOTES);
 		endif;		
 		
 		$options = array_merge($defaults,$options);
