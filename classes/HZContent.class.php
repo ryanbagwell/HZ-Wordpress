@@ -106,12 +106,20 @@ class HZContent {
 		$defaults = array(
 			'og:title'=>'',
 			'og:type'=>'blog',
-			'og:image'=>'http://'.$_SERVER['HTTP_HOST'].'/favicon.ico',
+			'og:image'=>'',
 			'og:url'=>'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
 			'og:site_name'=>get_bloginfo('name'),
 			'fb:admins'=>'',
 			'og:description'=>'',
 		);
+		
+		//set the image		
+		if(is_single()):
+			$img = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID));
+			$defaults['og:image'] = $img[0];
+		else:
+			$defaults['og:image'] = '/favicon.ico';
+		endif;
 		
 		//set the title		
 		if (is_category()):
