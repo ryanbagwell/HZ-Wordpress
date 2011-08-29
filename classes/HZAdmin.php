@@ -18,20 +18,20 @@ class HZAdmin {
 	function create_username($first = null,$last = null) {
 	
 		$name = strtolower(substr($first,0,1) . $last);
-	
+
 		//if it's a valid combintion of their first initial and last name, return that
-		if (validate_username($name))
+		if (validate_username($name) && is_null(username_exists($name)))
 			return $name;
-		
+	
 		//now loop through and add a number at the end until we find a valid name
 		$i = 0;
 		while($i < 10000) {
-			if (validate_username($name + $i))
-				return $name + $i;
+			if (validate_username($name.$i) && is_null(username_exists($name.$i)))
+				var_dump($name.$i); 
+				return $name.$i;
 			$i++;	
 		}
-	
-	
+		
 	}
 
 
