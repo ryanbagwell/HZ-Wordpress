@@ -34,9 +34,9 @@ class HZUtilities {
    *
   */
 	function get_flash_message() {
-		if(!is_set($_SESSION))
-			session_start();
 		
+		$started = session_start();
+				
 		$msg = $_SESSION['flash_message'];
 
 		if ($msg == '') {
@@ -60,10 +60,12 @@ class HZUtilities {
 	 *
   */
 	function set_flash_message($msg = null) {
+		
+		
 		if (headers_sent())
 			return "Headers already sent. Can't modify session";
 			
-		if (!is_set($_SESSION))
+		if (!isset($_SESSION))
 			session_start();		
 		
 		if (!is_null($msg)) {
