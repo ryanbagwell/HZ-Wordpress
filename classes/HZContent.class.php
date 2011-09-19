@@ -77,10 +77,11 @@ class HZContent {
 	 * @param string $layout the button style. Can be "standard," "button_count," "box_count." Defaults to "standard."
 	 *	
 	 */	
-	function get_fb_like_button($url = null,$width = '90px', $height = '22px',$layout='standard') {
+	function get_fb_like_button($url = null,$width = '90px', $height = '22px',$layout='button_count') {
+		global $post;
 
 		if (is_null($url))
-			return;
+			$url = $this->get_tiny_url(get_permalink($post->ID));
 			
 		$url = urlencode($url);
 
@@ -173,6 +174,77 @@ class HZContent {
 		 return "<span class='$button_name' st_title='$post->post_title' st_url='$url' st_image='{$image[0]}' st_summary='$summary'></span>";
 
 		
+	}
+	
+
+	/**
+	 *
+	 * Get Tweet Button
+	 *
+	 * Returns markup for a Tweet button
+	 *
+	 * @param array $options an array of options (url=>post_url,via=>null,text=>post_title,related=>null,count=>null,lang=>'en',counturl=>null)
+	 * @param int $post_id the post id to share. Optional. Defaults to global $post value.
+	 *	
+	 */
+	function get_tweet_button($options = array(),$post_id = null,$width="97",$height="23") {
+		global $post;
+
+		if (!is_null($post_id))
+			$post = get_post($post_id);
+
+		$title = htmlspecialchars($post->post_title,ENT_QUOTES);
+		$url = $this->get_tiny_url(get_permalink($post->ID));
+		
+		$thumb_id = get_post_thumbnail_id($post->ID);
+		$image = wp_get_attachment_image_src($thumb_id);
+		$summary = htmlspecialchars($this->get_excerpt(25,null,false),ENT_QUOTES);				
+		
+		
+		$defaults = array(
+			'url'=>$url,
+			'via'=> get_bloginfo('name'),
+			'text'=>$title,
+			'related'=>null,
+			'count'=>null,
+			'lang'=>'en',
+			'counturl'=>null,
+		);
+	
+		$options = array_merge($defaults,$options);
+		
+		$src = "//platform.twitter.com/widgets/tweet_button.html?";
+		
+		foreach($options as $key => $value) {
+			if (!is_null($value))
+				$src .= "$key=$value&";
+		}
+		
+		$src = rtrim($src,'&');
+	
+		
+		$html = "<iframe class='hz-tweet-button' allowtransparency='true' width='$width' height='$height' frameborder='0' scrolling='no' src='$src'></iframe>";
+		
+		return $html;
+		
+		
+	}
+
+
+	/**
+	 *
+	 * Get Tiny Url
+	 *
+	 * Returns a url shortened version of $url via TinyURL
+	 *
+	 * @param array $url the url to shorten (url=>post_url,via=>null,text=>post_title,related=>null,count=>null,lang=>'en',counturl=>null)
+	 *	
+	 */	
+	function get_tiny_url($url = null) {
+		if (is_null($url))
+			return $url;
+		
+		return file_get_contents("http://tinyurl.com/api-create.php?url=".$url);
 	}
 		
 	
