@@ -105,19 +105,23 @@ class HZContent {
 		$defaults = array(
 			'og:title'=>'',
 			'og:type'=>'blog',
-			'og:image'=>'',
+			'og:image'=>'/favicon.ico',
 			'og:url'=>'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
 			'og:site_name'=>get_bloginfo('name'),
 			'fb:admins'=>'',
-			'og:description'=>'',
+			'og:description'=> htmlspecialchars(get_bloginfo('description'),ENT_QUOTES),
 		);
 		
 		//set the image		
 		if(is_single()):
 			$img = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID));
 			$defaults['og:image'] = $img[0];
-		else:
-			$defaults['og:image'] = '/favicon.ico';
+		elseif(is_author()):
+			$author = $wp_query->get_queried_object();
+			$image = get_avatar($author->ID);
+			$url = '';
+			preg_match("/src='([^']*)'/",$image,$url);
+			$defaults['og:image'] = $url[1];
 		endif;
 		
 		//set the title		
@@ -136,8 +140,6 @@ class HZContent {
 			$auth = $wp_query->get_queried_object();
 			$excerpt = $this->get_excerpt(array('readmore'=>false,'text'=>$auth->user_description));
 			$defaults['og:description'] = htmlspecialchars($excerpt." ...",ENT_QUOTES);
-		else:
-			$defaults['og:description'] = htmlspecialchars(get_bloginfo('description'),ENT_QUOTES);
 		endif;		
 		
 		$options = array_merge($defaults,$options);
