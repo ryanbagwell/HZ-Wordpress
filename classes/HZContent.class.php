@@ -121,6 +121,8 @@ class HZContent {
 			$image = get_avatar($author->ID);
 			$url = '';
 			preg_match("/src='([^']*)'/",$image,$url);
+			if (stristr($url[1],"http") === False)
+				$url[1] = get_bloginfo('url').$url[1];
 			$defaults['og:image'] = $url[1];
 		endif;
 		
