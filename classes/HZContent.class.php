@@ -90,8 +90,6 @@ class HZContent {
 	
 	}
 	
-	
-	
 	/**
 	 *
 	 * Print FB OpenGraph Meta Data
@@ -102,7 +100,7 @@ class HZContent {
 	 *	
 	 */	
 	function print_fb_meta($options = array()) {
-		global $post, $cat;
+		global $post, $cat, $wp_query;
 
 		$defaults = array(
 			'og:title'=>'',
@@ -134,6 +132,10 @@ class HZContent {
 		//set the description
 		if(is_single()):
 			$defaults['og:description'] = htmlspecialchars($this->get_excerpt(array('readmore'=>false)),ENT_QUOTES);
+		elseif (is_author()):	
+			$auth = $wp_query->get_queried_object();
+			$excerpt = $this->get_excerpt(array('readmore'=>false,'text'=>$auth->user_description));
+			$defaults['og:description'] = htmlspecialchars($excerpt." ...",ENT_QUOTES);
 		else:
 			$defaults['og:description'] = htmlspecialchars(get_bloginfo('description'),ENT_QUOTES);
 		endif;		
