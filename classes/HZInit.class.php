@@ -12,7 +12,6 @@ class HZInit extends HZWP {
 				
 		$this->remove_generator_meta();
 		
-		add_filter('stylesheet_directory_uri',array($this,'set_stylesheet_dir'),10,2);
 		add_action('wp_head',array('HZInit','print_author_tag'),null,null);
 
 		add_theme_support('post-thumbnails');
