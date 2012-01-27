@@ -13,7 +13,6 @@ class HZInit extends HZWP {
 		$this->remove_generator_meta();
 		
 		add_action('wp_head',array('HZInit','print_author_tag'),null,null);
-
 		add_theme_support('post-thumbnails');
 		add_theme_support('post-formats');
 			
@@ -30,16 +29,24 @@ class HZInit extends HZWP {
 
 		if ($this->utilities->is_ie() == 'IE8')
 			wp_enqueue_style('ie8',get_bloginfo('template_url').'/css/ie8.css','main-styles');
-			
-		add_action('login_head',create_function(null,"echo '<link rel=\"stylesheet\" type=\"text/css\" href=\"" . get_bloginfo('stylesheet_directory') . "/hz-admin.css\" />';"));		
 	
 		if(is_admin())
 			wp_enqueue_style('hz-admin',get_bloginfo('template_url').'/css/hz-admin.css');			
 			
-		if(!is_admin())
-			wp_enqueue_style('main-styles',get_bloginfo('template_url').'/css/style.css');
+		add_action('wp_print_styles',array($this,'add_main_stylesheet'));
 
 	}
+	
+	
+	function add_main_stylesheet() {
+		
+		if(is_admin())
+			return;
+			
+		wp_enqueue_style('main-styles',get_bloginfo('template_url').'/css/style.css');
+		
+	}
+	
 
 
 	function add_javascript() {
