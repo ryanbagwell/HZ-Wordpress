@@ -20,11 +20,6 @@ class HZInit extends HZWP {
 	}
 
 	function add_stylesheets() {
-
-				
-		if(!is_admin())
-			wp_enqueue_style('main-styles',get_bloginfo('template_url').'/css/style.css');		
-				
 		wp_enqueue_style('jquery-ui-lightness',get_bloginfo('template_url').'/css/jquery-ui-lightness.css');
 
 		if ($this->utilities->is_ie() == 'IE6')
@@ -41,6 +36,9 @@ class HZInit extends HZWP {
 		if(is_admin())
 			wp_enqueue_style('hz-admin',get_bloginfo('template_url').'/css/hz-admin.css');			
 			
+		if(!is_admin())
+			wp_enqueue_style('main-styles',get_bloginfo('template_url').'/css/style.css');
+
 	}
 
 

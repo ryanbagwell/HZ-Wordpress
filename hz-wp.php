@@ -7,7 +7,8 @@
  * Author: Ryan Bagwell
  * Author URI: http://www.ryanbagwell.com
  * License: GPL2
- * @package HZ Wordpress 
+ * @package HZ Wordpress
+ * @author Ryan Bagwell 
  *
 */
 
