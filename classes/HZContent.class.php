@@ -9,28 +9,30 @@ class HZContent {
 	 *
 	 * Returns the excerpt based on provided text string
 	 *
-	 * @param int the $length the number of words to return
-	 * @param string $text a text string with which to replace the excerpt
-	 * @param	bool $readmore add a readmore link to the end of the excerpt
-	 * @param	string $readmore_link the url of the readmore link link
+	 * @param array $params an optional array of options that are listed below:
+	 * @param int $length the number of words to return. Default: 52
+	 * @param string $text a text string with which to replace the excerpt. Defaults to the current post's body content if a post object exists. 
+	 * @param bool $readmore add a readmore link to the end of the excerpt. Default: true
+	 * @param string $readmore_link the url of the readmore link link. Defaults to the current post's url if a $post object exists.
+	 * @param string $readmore_text the text of the read more link. Default: Read more &raquo;
 	 * @return bool returns the excerpt on success, false on failure
 	 *	
 	 */
-	function get_excerpt($length = 52, $text = null, $readmore = true, $readmore_link = null) {
+	function get_excerpt($params = array()) {
 		global $post;
 
 		$defaults = array(
 			'length'=>52,
 			'text'=>null,
 			'readmore'=>true,
-			'readmore_link'=>null,
+			'readmore_link'=>get_permalink($post->ID),
+			'readmore_text'=>"Read more &raquo;",
 		);
 		
-		if (is_array($length)) {		
-			$options = array_merge($defaults,$length);
-			extract($options)	;
-		}
-
+		$options = array_merge($defaults,$params);
+		
+		extract($options);
+		
 		//use the current post body if a text value is not specified
 		if (is_null($text))
 			$text = $post->post_content;
@@ -53,13 +55,12 @@ class HZContent {
 		//glue them back together
 		$excerpt = implode(' ',$words[0]);
 		
-		$excerpt = rtrim(trim($excerpt),'.');
+		$excerpt = rtrim(trim($excerpt),'.," ');
 
-		if(!$readmore_link && $post)
-			$readmore_link = get_permalink($post->ID);
+		$excerpt .= " ... ";
 		
 		if ($readmore)
-			$excerpt .= " ... <a class='read-more' href='$readmore_link'>Read more</a>";
+			$excerpt .= "<span class='read-more'><a href='$readmore_link'>$readmore_text</a></span>";
 		
 		return rtrim($excerpt,',.');
 

@@ -1,12 +1,14 @@
 <?php
-/*
-Plugin Name: HZ Wordpress
-Plugin URI: http://www.hzdg.com
-Description: A library of Wordpress functions
-Version: 1.0
-Author: Ryan Bagwell
-Author URI: http://www.ryanbagwell.com
-License: GPL2
+/**
+ * Plugin Name: HZ Wordpress
+ * Plugin URI: http://www.hzdg.com
+ * Description: A library of Wordpress functions
+ * Version: 1.0
+ * Author: Ryan Bagwell
+ * Author URI: http://www.ryanbagwell.com
+ * License: GPL2
+ * @package HZ Wordpress 
+ *
 */
 
 $hzwp = new HZWP();
