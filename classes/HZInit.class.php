@@ -52,8 +52,6 @@ class HZInit extends HZWP {
 		wp_enqueue_style('main-styles',get_bloginfo('template_url').'/css/style.css');
 		
 	}
-	
-
 
 	function add_javascript() {
 		

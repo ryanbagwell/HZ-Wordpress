@@ -253,6 +253,41 @@ class HZContent {
 		
 		return file_get_contents("http://tinyurl.com/api-create.php?url=".$url);
 	}
+	
+	/**
+	 *
+	 * Get Breadcrumbs
+	 *
+	 * Returns HTML for breadcrumbs
+	 *	
+	 */	
+	function get_breadcrumbs() {
+		global $post;
+
+		$crumbs = "";
+
+		if (!is_home()) {
+		    $crumbs .= "<nav class='breadcrumbs'>";
+			$crumbs .= '<a href="';
+			$crumbs .= get_option('home');
+			$crumbs .= '">';
+			$crumbs .= "Home";
+			$crumbs .= "</a> &raquo; ";
+			
+			if (is_category() || is_single()) {
+				$cat = get_the_category();
+				$crumbs .= "<a href='".get_category_link($cat[0]->term_id)."'>{$cat[0]->cat_name}</a>";
+			} elseif (is_page()) {
+				$crumbs .= $post->post_title;
+			}
+			
+			$crumbs = rtrim($crumbs,'&raquo;');
+			$crumbs .= "</nav>";
+		}
+
+	    return $crumbs;
+	}
+	
 		
 	
 }
