@@ -1,7 +1,11 @@
 <?php
 class HZInit extends HZWP {
 	
-	function HZInit() {
+	private $options;
+	
+	function HZInit($options) {
+
+		$this->options = $options;
 
 		$this->utilities = new HZUtilities();
 
@@ -12,7 +16,9 @@ class HZInit extends HZWP {
 				
 		$this->remove_generator_meta();
 		
-		add_action('wp_head',array('HZInit','print_author_tag'),null,null);
+		if ($this->options->print_author_tag)
+			add_action('wp_head',array($this,'print_author_tag'),null,null);
+				
 		add_theme_support('post-thumbnails');
 		add_theme_support('post-formats');
 			
@@ -50,15 +56,37 @@ class HZInit extends HZWP {
 
 
 	function add_javascript() {
-		if (!is_admin()) {
-			wp_deregister_script('jquery');
-			wp_enqueue_script('jquery',get_bloginfo('template_url').'/js/jquery-latest.min.js'); 
-			wp_enqueue_script('jquery-ui',get_bloginfo('template_url').'/js/jquery-ui-latest.min.js','jquery');
-			wp_enqueue_script('swfobject',get_bloginfo('template_url').'/js/swfobject-latest.js','jquery');
-			wp_enqueue_script('global-scripts',get_bloginfo('template_url').'/js/global-scripts.js','jquery',null,true);  		  
+		
+		if (is_admin())
+			return;
+		
+		if ($this->options->load_modernizr)
+			wp_enqueue_script('modernizr',get_bloginfo('template_url').'/js/modernizr.js');
+		
+		wp_deregister_script('jquery');
+		
+		if ($this->options->use_jquery_google_cdn) {
+			wp_register_script('jquery','https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
+			wp_enqueue_script('jquery');
+		} else {
+			wp_enqueue_script('jquery',get_bloginfo('template_url').'/js/jquery-latest.min.js');
 		}
+		
+		if ($this->options->use_jquery_ui_google_cdn) {
+			wp_register_script('jquery-ui','https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js','jquery');
+		} else {
+			wp_register_script('jquery-ui',get_bloginfo('template_url').'/js/jquery-latest.min.js','jquery');
+		}
+		
+		if ($this->options->load_jquery_ui)
+			wp_enqueue_script('jquery-ui');
+		
+		if ($this->options->load_swf_object)
+			wp_enqueue_script('swfobject',get_bloginfo('template_url').'/js/swfobject-latest.js','jquery');
+		
+		wp_enqueue_script('global-scripts',get_bloginfo('template_url').'/js/global-scripts.js','jquery',null,true);  		  
+		
 	}
-
 
   /**
    *
@@ -104,9 +132,9 @@ class HZInit extends HZWP {
    * @return void
 	 *
   */	
-	function print_author_tag($author = "Hirshorn Zuckerman Design Group") {
+	function print_author_tag() {
 		
-		echo "<meta name='author' content='$author' />\r\n";
+		echo "<meta name='author' content='{$this->options->site_author}' />\r\n";
 	}
 	
 }

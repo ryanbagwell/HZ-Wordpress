@@ -12,7 +12,7 @@
  *
 */
 
-$hzwp = new HZWP();
+$hzwp = new stdClass();
 
 /**
  * A library of functions commonly used in WordPress development
@@ -27,16 +27,19 @@ $hzwp = new HZWP();
  * @copyright none  
  */
 class HZWP {
-		
-	public function HZWP() {
 
+	private $options;
+		
+	public function HZWP($options = array()) {
+
+		$this->set_options($options);
 				
 		$this->require_files();
 		
 		$this->load_classes();
-		
-		$GLOBALS['hzwp'] == $this;
 	
+		$GLOBALS['hzwp'] == $this;	
+
 	}
 	
 	private function require_files() {
@@ -67,7 +70,7 @@ class HZWP {
 			$parts = explode('.',$file);
 			$class_name = $parts[0];
 			$property_name = strtolower(substr($parts[0],2));
-			$this->$property_name = new $class_name;
+			$this->$property_name = new $class_name($this->options);
 		}
 	}
 
@@ -79,9 +82,40 @@ class HZWP {
 		$i->hz_install();		
 	}
 	
+	function set_options($options = array()) {
+
+		$defaults = array(
+			'site_author' => 'Hirshorn Zuckerman Design Group',
+			'print_author_tag' => true,
+			'load_swf_object' => false,
+			'use_jquery_google_cdn' => true,
+			'use_jquery_ui_google_cdn' => true,
+			'load_jquery_ui' => false,
+			'load_moderinzr' => false
+		);
+		
+		$options = array_merge($defaults,$options);
+
+		$this->options = new stdClass();
+	
+		
+		foreach($options as $key => $value) {
+			$this->options->$key = $value;
+		}
+		
+	}	
+	
+	
+	function hzwp_create() {
+		global $hzwp;
+		
+		$hzwp = new HZWP($hzwp->options);
+	
+	}
+	
 }
 
-
+add_action('init',array('HZWP','hzwp_create'));
 
 register_activation_hook(__FILE__,array('HZWP','hzwp_activate'));
 

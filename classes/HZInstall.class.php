@@ -53,7 +53,13 @@ class HZInstall {
 		fwrite($handle,$code);
 		fclose($handle);
 	}
-
+	
+	function save_modernizr() {
+		$code = file_get_contents('http://www.modernizr.com/downloads/modernizr.js');
+		$handle = fopen(TEMPLATEPATH."/js/modernizr.js","w");
+		fwrite($handle,$code);
+		fclose($handle);	
+	}
 
 	function create_global_js() {
 		
