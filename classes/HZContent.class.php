@@ -115,7 +115,7 @@ class HZContent {
 		
 		//set the image		
 		if(is_single()):
-			$img = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID));
+			$img = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), array(200, 200) );
 			$defaults['og:image'] = $img[0];
 		elseif(is_author()):
 			$author = $wp_query->get_queried_object();
