@@ -59,12 +59,14 @@ class HZInit extends HZWP {
 			return;
 		
 		if ($this->options->load_modernizr)
-			wp_enqueue_script('modernizr',get_bloginfo('template_url').'/js/modernizr.js');
+		wp_enqueue_script('modernizr',get_bloginfo(
+			'template_url').'/js/modernizr.js');
 		
 		wp_deregister_script('jquery');
 		
 		if ($this->options->use_jquery_google_cdn) {
-			wp_register_script('jquery','https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
+			wp_register_script(
+				'jquery','https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
 			wp_enqueue_script('jquery');
 		} else {
 			wp_enqueue_script('jquery',get_bloginfo('template_url').'/js/jquery-latest.min.js');
