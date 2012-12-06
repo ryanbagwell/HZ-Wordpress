@@ -275,7 +275,8 @@ class HZContent {
 		
 		if ( is_category() ) {
 			$ancestors = get_ancestors(intval($cat), 'category');
-			foreach ( $ancestors as $key => $ID ) {
+			
+			foreach ( array_reverse($ancestors) as $key => $ID ) {
 				$crumbs[] = $this->get_breadcrumb_link(
 						get_category_link($ID), get_cat_name($ID));
 			}
@@ -286,8 +287,7 @@ class HZContent {
 		
 		if ( is_page() || is_single() ) {
 			$ancestors = get_ancestors($post->ID, 'page');
-			
-			foreach ( $ancestors as $key => $ID ) {
+			foreach ( array_reverse($ancestors) as $key => $ID ) {
 				$crumbs[] = $this->get_breadcrumb_link(
 						get_permalink($ID), get_the_title($ID));
 			};
