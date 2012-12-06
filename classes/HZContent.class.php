@@ -268,7 +268,6 @@ class HZContent {
 		if ( is_home() )
 			return;
 
-
 		$crumbs = array(
 			$this->get_breadcrumb_link(get_option('home'), 'Home')
 		);
