@@ -259,37 +259,60 @@ class HZContent {
 	 * Get Breadcrumbs
 	 *
 	 * Returns HTML for breadcrumbs
-	 *	
+	 *
+	 * @param string $separator the character(s) to separate the crumbs
 	 */	
-	function get_breadcrumbs() {
-		global $post;
+	function get_breadcrumbs( $separator ) {
+		global $post, $cat, $page;
 
-		$crumbs = "";
+		if ( is_home() )
+			return;
 
-		if (!is_home()) {
-		    $crumbs .= "<nav class='breadcrumbs'>";
-			$crumbs .= '<a href="';
-			$crumbs .= get_option('home');
-			$crumbs .= '">';
-			$crumbs .= "Home";
-			$crumbs .= "</a> &raquo; ";
-			
-			if (is_category() || is_single()) {
-				$cat = get_the_category();
-				$crumbs .= "<a href='".get_category_link($cat[0]->term_id)."'>{$cat[0]->cat_name}</a>";
-			} elseif (is_page()) {
-				$crumbs .= $post->post_title;
+
+		$crumbs = array(
+			$this->get_breadcrumb_link(get_option('home'), 'Home')
+		);
+		
+		if ( is_category() ) {
+			$ancestors = get_ancestors(intval($cat), 'category');
+			foreach ( $ancestors as $key => $ID ) {
+				$crumbs[] = $this->get_breadcrumb_link(
+						get_category_link($ID), get_cat_name($ID));
 			}
 			
-			$crumbs = rtrim($crumbs,'&raquo;');
-			$crumbs .= "</nav>";
-		}
+			$crumbs[] = get_cat_name($cat);
 
-	    return $crumbs;
-	}
-	
+		}
 		
-	
+		if ( is_page() || is_single() ) {
+			$ancestors = get_ancestors($post->ID, 'page');
+			
+			foreach ( $ancestors as $key => $ID ) {
+				$crumbs[] = $this->get_breadcrumb_link(
+						get_permalink($ID), get_the_title($ID));
+			};
+			
+			$crumbs[] = $post->post_title;
+
+		};
+
+    return implode(' &raquo; ', $crumbs);
+	}
+
+
+	/**
+	 *
+	 * Get Breadcrumb Link
+	 *
+	 * Returns HTML for a single breadcrumb link
+	 *
+	 * @param string $url the url href value of the link
+	 * @param string $name link's name to display
+	 */	
+	function get_breadcrumb_link($url, $name) {
+		return "<a href='$url' title='$name'>$name</a>";
+	}
+
 }
 
 
