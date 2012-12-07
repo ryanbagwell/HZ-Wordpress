@@ -262,7 +262,7 @@ class HZContent {
 	 *
 	 * @param string $separator the character(s) to separate the crumbs
 	 */	
-	function get_breadcrumbs( $separator ) {
+	function get_breadcrumbs( $separator=' &raquo;' ) {
 		global $post, $cat, $page;
 
 		if ( is_home() )
@@ -295,7 +295,7 @@ class HZContent {
 
 		};
 
-    return implode(' &raquo; ', $crumbs);
+    return implode($separator, $crumbs);
 	}
 
 
