@@ -94,7 +94,7 @@ class HZWP {
 			'load_moderinzr' => false
 		);
 		
-		$options = array_merge($defaults,$options);
+		$options = array_merge($defaults, $options);
 
 		$this->options = new stdClass();
 	
@@ -109,14 +109,14 @@ class HZWP {
 	function hzwp_create() {
 		global $hzwp;
 		
-		$hzwp = new HZWP($hzwp->options);
+		$hzwp = new HZWP();
 	
 	}
 	
 }
 
-add_action('init',array('HZWP','hzwp_create'));
+add_action('init', array('HZWP', 'hzwp_create'));
 
-register_activation_hook(__FILE__,array('HZWP','hzwp_activate'));
+register_activation_hook(__FILE__, array('HZWP', 'hzwp_activate'));
 
 	
