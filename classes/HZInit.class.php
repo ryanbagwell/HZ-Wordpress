@@ -1,26 +1,26 @@
 <?php
 class HZInit extends HZWP {
-	
+
 	private $options;
-	
+
 	function HZInit($options) {
 
 		$this->options = $options;
 
 		$this->utilities = new HZUtilities();
-		
+
 		if ($this->options->use_jquery_google_cdn)
 			$this->set_jquery_cdn();
-		
+
 		$this->remove_generator_meta();
-		
+
 		if ($this->options->print_author_tag)
-			add_action('wp_head', 
+			add_action('wp_head',
 				array($this,'print_author_tag'), null, null);
-				
+
 		add_theme_support('post-thumbnails');
 		add_theme_support('post-formats');
-			
+
 	}
 
   /**
@@ -32,11 +32,12 @@ class HZInit extends HZWP {
    * @author Ryan Bagwell <ryan@ryanbagwell.com>
    * @return void
 	 *
-  */	
-	function set_jquery_cdn() {
+  */
+	function set_jquery_cdn($version='1.9.1') {
+        if (is_admin()) return false;
 		wp_deregister_script('jquery');
 		wp_register_script('jquery',
-			'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
+			"https:/ajax.googleapis.com/ajax/libs/jquery/$version/jquery.min.js", null, $version);
 	}
 
   /**
@@ -50,12 +51,12 @@ class HZInit extends HZWP {
 	 *
   */
 	function set_stylesheet_dir($stylesheet_uri = null,$theme_name){
-		
+
 		if (is_null($stylesheet_uri))
 			$stylesheet_uri = TEMPLATEPATH."/css";
-		
+
 		return $stylesheet_uri.'/css';
-	
+
 	}
 
 
@@ -68,7 +69,7 @@ class HZInit extends HZWP {
    * @author Ryan Bagwell <ryan@ryanbagwell.com>
    * @return void
 	 *
-  */	
+  */
 	function remove_generator_meta() {
 		remove_action('wp_head', 'wp_generator');
 	}
@@ -77,17 +78,17 @@ class HZInit extends HZWP {
    *
    * Author Setter
    *
-   * Adds an author tag to the 
+   * Adds an author tag to the
    *
    * @author Ryan Bagwell <ryan@ryanbagwell.com>
    * @return void
 	 *
-  */	
+  */
 	function print_author_tag() {
-		
+
 		echo "<meta name='author' content='{$this->options->site_author}' />\r\n";
 	}
-	
+
 }
 
 ?>
