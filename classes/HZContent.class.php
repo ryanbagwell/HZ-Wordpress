@@ -272,18 +272,31 @@ class HZContent {
 			$this->get_breadcrumb_link(get_option('home'), 'Home')
 		);
 
+
 		if (is_category())
 			$ancestors = get_ancestors(intval($cat), 'category');
 
-		if (is_page())
-			$ancestors = get_ancestors($post->ID, 'page');
 
 		if (is_single())
 			$ancestors = wp_get_post_categories($post->ID);
 
-		foreach ( array_reverse($ancestors) as $key => $ID ) {
-			$crumbs[] = $this->get_breadcrumb_link(
-					get_category_link($ID), get_cat_name($ID));
+
+		if (is_page()) {
+
+			$ancestors = get_ancestors($post->ID, 'page');
+
+			foreach ( array_reverse($ancestors) as $key => $ID ) {
+				$crumbs[] = $this->get_breadcrumb_link(
+						get_page_link($ID), get_the_title($ID));
+			}
+
+		} else {
+
+			foreach ( array_reverse($ancestors) as $key => $ID ) {
+				$crumbs[] = $this->get_breadcrumb_link(
+						get_category_link($ID), get_cat_name($ID));
+			}
+
 		}
 
 		if (is_category())
