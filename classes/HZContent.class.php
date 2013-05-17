@@ -277,9 +277,14 @@ class HZContent {
 			$ancestors = get_ancestors(intval($cat), 'category');
 
 
-		if (is_single())
+		if (is_single()) {
 			$ancestors = wp_get_post_categories($post->ID);
+			$last_ancestor = $ancestors[ count($ancestors)-1 ];
+			$other_ancestors = get_ancestors($last_ancestor, 'category');
+			$other_ancestors[] = $last_ancestor;
+			$ancestors = $other_ancestors;
 
+		}
 
 		if (is_page()) {
 
@@ -288,6 +293,13 @@ class HZContent {
 			foreach ( array_reverse($ancestors) as $key => $ID ) {
 				$crumbs[] = $this->get_breadcrumb_link(
 						get_page_link($ID), get_the_title($ID));
+			}
+
+		} elseif (is_single()) {
+
+			foreach ( $ancestors as $key => $ID ) {
+				$crumbs[] = $this->get_breadcrumb_link(
+						get_category_link($ID), get_cat_name($ID));
 			}
 
 		} else {
