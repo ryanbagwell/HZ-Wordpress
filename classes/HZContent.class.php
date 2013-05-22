@@ -278,12 +278,17 @@ class HZContent {
 
 
 		if (is_single()) {
+			$nearest_ancestor = false;
 			$ancestors = wp_get_post_categories($post->ID);
-			$last_ancestor = $ancestors[ count($ancestors)-1 ];
-			$other_ancestors = get_ancestors($last_ancestor, 'category');
-			$other_ancestors[] = $last_ancestor;
-			$ancestors = $other_ancestors;
 
+			foreach ($ancestors as $ancestor) {
+        		if (!$this->category_has_children($ancestor)) {
+            		$nearest_ancestor = $ancestor;
+            		break;
+        		}
+    		}
+			$ancestors = get_ancestors($nearest_ancestor, 'category');
+			$ancestors[] = $nearest_ancestor;
 		}
 
 		if (is_page()) {
@@ -332,6 +337,22 @@ class HZContent {
 	 */
 	function get_breadcrumb_link($url, $name) {
 		return "<a href='$url' title='$name'>$name</a>";
+	}
+
+
+
+	/**
+	 *
+	 * Category Has Children
+	 *
+	 * Checks to see if a category has children
+	 *
+	 * @param int $cat_id the id of the category to test
+	 */
+	function category_has_children($cat_id) {
+ 	   $children = get_term_children( $cat_id, 'category' );
+    	if (count($children) === 0) return false;
+    	return true;
 	}
 
 }
