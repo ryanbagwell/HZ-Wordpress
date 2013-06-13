@@ -18,7 +18,7 @@ class HZDb {
 	 public function db_migrate($search, $replace = null, $db_params = array()) {
 	
 		if (is_null($replace))
-			$replace = $_SERVER['SEVER_NAME'];
+			$replace = $_SERVER['SERVER_NAME'];
 	
 		if (count($db) != 0) {
 			extract($db_params);
